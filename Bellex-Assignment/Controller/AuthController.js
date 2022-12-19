@@ -5,21 +5,20 @@ const saltRounds = 10;
 
 export const signup = async (req, res) => {
   const password = await bcrypt.hash(req.body.password, saltRounds);
-  // const data = { ...req.body, password };
-  const {name, email, role}= req.body
+ 
+  const {username,  role}= req.body
   const users = await new User({
-    name,
-    email,
+    username,
+    // email,
     password: password,
     role
   })
-  // const user = await User.create(data);
   users.save(( error, success)=>{
     try {
       res.status(201).send({message: "success true", status: true
     })
     } catch (error) {
-      res.status(400).send({message: " error occured", status: false})
+      res.status(400).send({message: `Username ${username.username} already present`, status: false})
 
     }
   })
@@ -27,7 +26,7 @@ export const signup = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const user = await User.findOne({ email: req.body.email });
+  const user = await User.findOne({ username: req.body.username });
   if (!user) {
     res.status(404).json({ error: "User not found" });
     return;
