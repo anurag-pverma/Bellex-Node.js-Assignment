@@ -7,6 +7,10 @@ import connect from "./Database/db.js";
 const app = express();
 import router from "./Routes/index.js";
 
+app.use("/", (req, res)=>{
+  res.send("Hello Home page")
+})
+
 dotenv.config();
 const PORT = process.env.PORT || 4000;
 app.use(cors());
