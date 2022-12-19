@@ -1,7 +1,15 @@
+import one   from "../Models/User.js";
 import Orders from "../Models/productSchema.js";
+
 export const index = async (req, res) => {
    try {
-    const orders = await Orders.find();
+
+      const {userId, role}= req.params
+
+    const orders = await Orders.find({
+      userId : userId,
+      role:role
+    });
     res.json(orders);
    } catch (error) {
     res.status(402).json(error.errors);
@@ -9,12 +17,17 @@ export const index = async (req, res) => {
 };
 
 export const create = async (req, res) => {
+   const {userId, role}= req.params
  try {
     const { product_name, product_price, quantity } = req.body;
     const  saveOrders = new Orders({
       product_name,
       product_price,
-      quantity
+      quantity,
+      userId:req.params.userId,
+      role
+
+
     });
     await saveOrders.save();
     res.status(201).json({ message: "Success" });

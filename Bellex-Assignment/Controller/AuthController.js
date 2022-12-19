@@ -5,9 +5,25 @@ const saltRounds = 10;
 
 export const signup = async (req, res) => {
   const password = await bcrypt.hash(req.body.password, saltRounds);
-  const data = { ...req.body, password };
-  const user = await User.create(data);
-  res.json({ user });
+  // const data = { ...req.body, password };
+  const {name, email, role}= req.body
+  const users = await new User({
+    name,
+    email,
+    password: password,
+    role
+  })
+  // const user = await User.create(data);
+  users.save(( error, success)=>{
+    try {
+      res.status(201).send({message: "success true", status: true
+    })
+    } catch (error) {
+      res.status(400).send({message: " error occured", status: false})
+
+    }
+  })
+  // res.json({ user });
 };
 
 export const login = async (req, res) => {
