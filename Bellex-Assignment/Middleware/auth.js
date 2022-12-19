@@ -1,10 +1,10 @@
-import jwt  from "jsonwebtoken"
-import  { ObjectId } from "mongodb";
-import  User  from "../Models/User.js";
+import jwt from "jsonwebtoken";
+import { ObjectId } from "mongodb";
+import User from "../Models/User.js";
 
 const auth = async (req, res, next) => {
   if (
-    req.headers &&  
+    req.headers &&
     req.headers.authorization &&
     req.headers.authorization.split(" ")[1]
   ) {

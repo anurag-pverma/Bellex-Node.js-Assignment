@@ -1,28 +1,29 @@
-import User  from "../Models/User.js";
+import User from "../Models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const saltRounds = 10;
 
 export const signup = async (req, res) => {
   const password = await bcrypt.hash(req.body.password, saltRounds);
- 
-  const {username,  role}= req.body
+
+  const { username, role } = req.body;
   const users = await new User({
     username,
-    // email,
     password: password,
-    role
-  })
-  users.save(( error, success)=>{
+    role,
+  });
+  users.save((error, success) => {
     try {
-      res.status(201).send({message: "success true", status: true
-    })
+      res.status(201).send({ message: "success true", status: true });
     } catch (error) {
-      res.status(400).send({message: `Username ${username.username} already present`, status: false})
-
+      res
+        .status(400)
+        .send({
+          message: `Username ${username.username} already present`,
+          status: false,
+        });
     }
-  })
-  // res.json({ user });
+  });
 };
 
 export const login = async (req, res) => {
