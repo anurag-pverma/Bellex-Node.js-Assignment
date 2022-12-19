@@ -1,7 +1,7 @@
 # Bellex-Node.js-Assignment
 A mini e-commerce for ordering products and viewing order data stored in the MySQL/Mongo DB using NodeJS
 
-http://localhost:4000/order/63a0147242c7ceec168c6266/user
+
 
 
 #### Singup
@@ -22,4 +22,8 @@ http://localhost:4000/role/login
   "username": "firstname",
   "password": "124324"
 }
+
+######  Next process
+You Got access Tocken, use  tocken for next process for Post  product , get product 
+
 
