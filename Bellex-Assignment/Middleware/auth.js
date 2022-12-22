@@ -7,12 +7,12 @@ import Role from "../Models/roleSchema.js"
 export let  decode;
 export  const auth = async (req, res, next) => {
 
-  if(!req.headers){
-    return res.status(401).send({
-      success: false,
-      message: "Unauthorized"
-    })
-  }
+  // if(!req.headers){
+  //   return res.status(401).send({
+  //     success: false,
+  //     message: "Unauthorized"
+  //   })
+  // }
   if (
     req.headers &&
     req.headers.authorization &&
@@ -23,10 +23,10 @@ export  const auth = async (req, res, next) => {
       decode = await jwt.verify(token, "fake-jwt-secret");
 
       // const user = await User.findOne({ _id: ObjectId(decode.user._id) });
-      // const user = await User.findOne({ username: req.body.username });
+      const user = await User.findOne({ username: req.body.username });
       let username;
-      username= decode.username;
-      req.body.username = username;
+      username= decode.user;
+      // req.body.username = username;
 
 
 
