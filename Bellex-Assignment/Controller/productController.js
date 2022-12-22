@@ -1,4 +1,4 @@
-import one from "../Models/User.js";
+
 import Orders from "../Models/productSchema.js";
 
 export const index = async (req, res) => {
@@ -17,8 +17,29 @@ export const index = async (req, res) => {
 
 export const create = async (req, res) => {
   const { userId, role } = req.params;
+
   try {
     const { product_name, product_price, quantity } = req.body;
+    if(product_name.length <3 || product_name.length >10 ){
+       return res.status(400).send({
+        success: false,
+        message: "product_name  with character between 3 to 10"
+       })
+    }
+
+    if(product_price < 100 ||  product_price > 1000){
+      return res.status(400).send({
+        success: false,
+        message: "product_price should be between 100 to 1000"
+      })
+    }
+
+    if (quantity < 0  || quantity >10){
+      return res.status(400).send({
+        success: false,
+        message: "quantity should be between 1 to 10"
+      })
+    }
     const saveOrders = new Orders({
       product_name,
       product_price,
@@ -33,10 +54,10 @@ export const create = async (req, res) => {
   }
 };
 
-export const destroy = async (req, res) => {
-  await Orders.deleteOne({ _id: req.params.id });
-  res.json({ message: "success" });
-};
+// export const destroy = async (req, res) => {
+//   await Orders.deleteOne({ _id: req.params.id });
+//   res.json({ message: "success" });
+// };
 
 export const update = async (req, res) => {
   try {
