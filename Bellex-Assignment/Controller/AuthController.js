@@ -3,7 +3,13 @@ import Role from "../Models/roleSchema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
+import Orders from "../Models/productSchema.js";
 const saltRounds = 10;
+
+import * as middleWare  from "../Middleware/auth.js"
+
+let checkauth=(middleWare.auth);
+let getAuth = (middleWare.authorization);
 
 export const signup = async (req, res) => {
   const { username, role, password } = req.body;
@@ -98,17 +104,144 @@ export const login = async (req, res) => {
 
 //************************************** */
 
-const  authorization  = async (req, res, next)=>{
-  const {username} = req.body;
-  const user = await  User.findOne({username});
-  const userRole = await Role.findOne({_id: user.role})
-  if(userRole.name !== "admin"){
-    return res.status(402).send({
+
+
+// **************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /admin/orders  api call 
+export const getadmin= (checkauth, getAuth, async(req, res)=>{
+
+
+  try {
+    const role = await Role.findOne({name:"user"});
+    const user = await  User.find({role: role.id});
+    const  data = await Orders.find({});
+    const obj = {};
+    user.map((el)=>{
+      obj[el.username]=[];
+    })
+
+    data.map((item)=>{
+      obj[item.username].push({
+        order_id: item.order_id,
+        product_name: item.product_name,
+        product_price: item.product_price,
+        quantity: item.quantity,
+        status: item.status,
+      })
+    })
+    return res.status(200).send({obj}); 
+  } catch (error) {
+    
+    return res.status(401).send({
       success:false,
-      message:"Forbidden"
+      message: "Unauthorized",
     })
   }
-  else{
-    next();
+})
+
+// **************************************************
+
+// put request  / admin/orders/:order_id
+
+export const update = (checkauth, getAuth, async(req, res)=>{
+  try {
+    const {order_id}= req.params;
+    const {status, product_name, product_price, quantity, username}= req.body;
+
+    const order = await Orders.findOne({order_id: order_id});
+    if (order==null) {
+      return res.status(404).send({
+        success:false,
+        message: `Order ${order_id} not found`
+      })
+    }
+
+    if(order.status !== "new"){
+      return res.status(404).send({
+        success:false,
+        message:`Order status ${order.status} is invalid`
+      })
+    }
+
+    const updateOrder  = await Orders.updateOne(
+
+      {order_id},
+      {
+        order_id,
+        product_name,
+        product_price,
+        quantity,
+        status: status,
+        username,
+      }
+    );
+    return res.status(200).send({
+      status: status,
+      updateOrder,
+    })
+
+
+  } catch (error) {
+   
+    return res.status(401).send({
+      success:false,
+      message:"Unauthorized"
+
+    })
   }
-}
+})
+
+
+// **********************************************
+// Get all summury  => /admin/orders/summary
+export const getallsummary =(checkauth, getAuth, async(req, res)=>{
+  try {
+    const role = await Role.findOne({name: "user"});
+    const user = await User.find({role:role.id});
+    const data = await Orders.find({});
+    let obj = {};
+    user.map((item)=>{
+      obj[item.username]=[];
+    })
+    data.map((item)=>{
+      obj[item.username].push(item.product_price* item.quantity);
+    })
+    Object.keys(obj).forEach((key)=>{
+      obj[key]= obj[key].reduce((acc, curr)=>{
+        return  acc + curr
+      }, 0);
+    })
+    return res.status(200).send({
+     obj,
+    })
+  } catch (error) {
+
+    return res.status(401).send({
+      success: false,
+      message : "Unauthorized"
+    })
+    
+  }
+})
+
+

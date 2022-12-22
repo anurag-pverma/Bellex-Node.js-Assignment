@@ -2,15 +2,13 @@ import mongoose from "mongoose";
 const { Schema } = mongoose;
 
 const productSchema =  new Schema({
-    product_name: {type: String || Number, min:3, max:10},
-    product_price: {type:Number , min:100, max:1000},
-    quantity:{type : Number , min: 1, max: 10},
-    userId:{
-        type: String
-    },
-    role:{
-        type : String
-    }
+    order_id : {type:String},
+    product_name:{type:String},
+    product_price:{type:Number},
+    quantity : {type:Number},
+    userId : {type:String},
+    status : {type:String, default:"new"},
+    "username" : {type:String}
 
 })
 

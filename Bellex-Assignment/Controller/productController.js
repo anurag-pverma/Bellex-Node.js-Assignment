@@ -1,22 +1,30 @@
 
+import { v4 as uuidv4 } from 'uuid'
+import *   as middleware from "../Middleware/auth.js";
+import User from "../Models/User.js";
 import Orders from "../Models/productSchema.js";
+import Role from "../Models/roleSchema.js";
 
 export const index = async (req, res) => {
   try {
-    const { userId, role } = req.params;
-
-    const orders = await Orders.find({
-      userId: userId,
-      role: role,
-    });
-    res.json(orders);
+  
+    const userDetails = (middleware.decode) 
+    const orders = await Orders.find(
+      {username: userDetails.username}, {username:0});
+    // res.json(orders);
+    return res.status(201).send({
+      orders,
+    })
   } catch (error) {
-    res.status(402).json(error.errors);
+    return res.status(401).send({
+      success:false,
+      message:`Unauthorized`
+    })
   }
 };
 
 export const create = async (req, res) => {
-  const { userId, role } = req.params;
+  
 
   try {
     const { product_name, product_price, quantity } = req.body;
@@ -34,36 +42,33 @@ export const create = async (req, res) => {
       })
     }
 
-    if (quantity < 0  || quantity >10){
+    if (quantity < 1  || quantity >10){
       return res.status(400).send({
         success: false,
         message: "quantity should be between 1 to 10"
       })
     }
-    const saveOrders = new Orders({
+
+    const userDeatails = (middleware.decode);
+    // console.log(userDeatails.user_id)
+    const saveOrders = await Orders.create({
+      order_id: uuidv4(),
       product_name,
       product_price,
       quantity,
-      userId: req.params.userId,
-      role,
+      user_id: userDeatails.uid,
+      status: "new",
+      username: userDeatails.username,
     });
-    await saveOrders.save();
-    res.status(201).json({ message: "Success" });
+    return res.status(201).send({
+      success:true,
+      message:'created successfully'
+    })
   } catch (error) {
-    res.status(400).json(error.errors);
+    return res.status(401).send({
+      success:false,
+      message:'Unauthorized'
+    })
   }
 };
 
-// export const destroy = async (req, res) => {
-//   await Orders.deleteOne({ _id: req.params.id });
-//   res.json({ message: "success" });
-// };
-
-export const update = async (req, res) => {
-  try {
-    await Orders.updateOne({ _id: req.params.id }, { $set: req.body });
-    res.status(200).json({ message: "success" });
-  } catch (error) {
-    res.status(404).json(error.errors);
-  }
-};
