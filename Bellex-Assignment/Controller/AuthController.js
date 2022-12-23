@@ -2,7 +2,7 @@ import User from "../Models/User.js";
 import Role from "../Models/roleSchema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { body, validationResult } from "express-validator";
+// import { body, validationResult } from "express-validator";
 import Orders from "../Models/productSchema.js";
 const saltRounds = 10;
 
@@ -112,8 +112,7 @@ export const getadmin =
       user.map((el) => {
         obj[el.username] = [];
       });
-console.log(obj);
-
+      console.log(obj);
       data.map((item) => {
         obj[item.username].push({
           order_id: item.order_id,
