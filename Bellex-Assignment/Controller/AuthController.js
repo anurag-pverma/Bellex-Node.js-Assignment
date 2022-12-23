@@ -106,10 +106,13 @@ export const getadmin =
       const role = await Role.findOne({ name: "user" });
       const user = await User.find({ role: role.id });
       const data = await Orders.find({});
+      console.log(data);
+      console.log(user)
       const obj = {};
       user.map((el) => {
         obj[el.username] = [];
       });
+console.log(obj);
 
       data.map((item) => {
         obj[item.username].push({
@@ -120,6 +123,8 @@ export const getadmin =
           status: item.status,
         });
       });
+
+      console.log(obj);
       return res.status(200).send({ obj });
     } catch (error) {
       return res.status(401).send({
@@ -149,7 +154,6 @@ export const update =
           message: `Order ${order_id} not found`,
         });
       }
-
       if (order.status !== "new") {
         return res.status(404).send({
           success: false,
@@ -177,7 +181,7 @@ export const update =
         success: false,
         message: "Unauthorized",
       });
-    }
+       }
   });
 
 // **********************************************

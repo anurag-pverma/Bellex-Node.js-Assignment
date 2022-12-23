@@ -10,7 +10,7 @@ export const index = async (req, res) => {
   
     const userDetails = (middleware.decode) 
     const orders = await Orders.find(
-      {username: userDetails.username}, {username:0});
+      {username: userDetails.user.username}, {username:0});
     // res.json(orders);
     return res.status(201).send({
       orders,
@@ -50,20 +50,23 @@ export const create = async (req, res) => {
     }
 
     const userDeatails = (middleware.decode);
-    // console.log(userDeatails.user_id)
+    // console.log(userDeatails)
     const saveOrders = await Orders.create({
       order_id: uuidv4(),
       product_name,
       product_price,
       quantity,
-      user_id: userDeatails.uid,
       status: "new",
-      username: userDeatails.username,
+      username: userDeatails.user.username,
     });
+
     return res.status(201).send({
-      success:true,
-      message:'created successfully'
+      // success:true,
+    saveOrders
+      // message:'created successfully'
     })
+
+
   } catch (error) {
     return res.status(401).send({
       success:false,

@@ -26,10 +26,8 @@ export  const auth = async (req, res, next) => {
       const user = await User.findOne({ username: req.body.username });
       let username;
       username= decode.user;
+      console.log(username)
       // req.body.username = username;
-
-
-
       if (!username) {
         res.status(401).json({ error: "Unauthorized" });
         return;

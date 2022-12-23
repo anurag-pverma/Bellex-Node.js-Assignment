@@ -5,6 +5,7 @@ const router = Router();
 router.use(middleware.auth);
 router.get("/", productControllers.index);
 router.post(`/`, productControllers.create);
+// not protected route ...X
 // router.get("/admin/orders", productControllers.getadmin);
 // router.put("/admin/orders/:order_id", productControllers.update);
 // router.patch("/admin/orders/summary", productControllers.getallsummary);
