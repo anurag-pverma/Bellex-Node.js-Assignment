@@ -4,4 +4,4 @@ const { Schema } = mongoose;
 const roleSchema = new Schema({
   name: String,
 });
-export default new mongoose.model("Role", roleSchema, "Role")
+export default new mongoose.model("Role", roleSchema, "Role");
