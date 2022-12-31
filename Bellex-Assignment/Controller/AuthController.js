@@ -5,9 +5,7 @@ import jwt from "jsonwebtoken";
 // import { body, validationResult } from "express-validator";
 import Orders from "../Models/productSchema.js";
 const saltRounds = 10;
-
 import * as middleWare from "../Middleware/auth.js";
-
 let checkauth = middleWare.auth;
 let getAuth = middleWare.authorization;
 
@@ -71,7 +69,6 @@ export const signup = async (req, res) => {
     }
   });
 };
-
 //Role Login Parl
 export const login = async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
@@ -94,7 +91,6 @@ export const login = async (req, res) => {
 };
 
 //************************************** */
-
 // **************************************************
 
 // /admin/orders  api call
@@ -106,7 +102,7 @@ export const getadmin =
       const role = await Role.findOne({ name: "user" });
       const user = await User.find({ role: role.id });
       const data = await Orders.find({});
-      console.log(data);
+      // console.log(data);
       console.log(user)
       const obj = {};
       user.map((el) => {
@@ -123,8 +119,12 @@ export const getadmin =
         });
       });
 
-      console.log(obj);
-      return res.status(200).send({ obj });
+      // console.log(obj);
+      return res.status(200).send({ 
+        success:true,
+        obj
+
+       });
     } catch (error) {
       return res.status(401).send({
         success: false,
@@ -134,7 +134,6 @@ export const getadmin =
   });
 
 // **************************************************
-
 // put request  / admin/orders/:order_id
 
 export const update =

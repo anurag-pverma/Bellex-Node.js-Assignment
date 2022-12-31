@@ -12,3 +12,5 @@ const productSchema = new Schema({
 });
 
 export default new mongoose.model("Orders", productSchema);
+
+//  this is product schema

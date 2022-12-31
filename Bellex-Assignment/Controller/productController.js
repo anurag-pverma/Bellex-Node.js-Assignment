@@ -24,8 +24,6 @@ export const index = async (req, res) => {
 };
 
 export const create = async (req, res) => {
-  
-
   try {
     const { product_name, product_price, quantity } = req.body;
     if(product_name.length <3 || product_name.length >10 ){
